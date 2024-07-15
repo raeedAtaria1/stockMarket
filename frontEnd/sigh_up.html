@@ -13,6 +13,8 @@
   <div class="container form-container">
     <h1 class="text-center">Sign Up</h1>
     <form id="signupForm">
+      <div class="alert alert-danger d-none" id="error-message"></div>
+
       <div class="mb-3">
         <label for="fullName" class="form-label">Full Name</label>
         <input type="text" class="form-control" id="fullName" name="fullName" required>
@@ -26,19 +28,8 @@
         <label for="InputPassword" class="form-label">Password</label>
         <input type="password" class="form-control" id="InputPassword" name="password" required>
       </div>
-
-      <div class="mb-3">
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="workerCheckbox">
-          <label class="form-check-label" for="workerCheckbox">I am a worker in a company</label>
-        </div>
-      </div>
       
-      <div class="mb-3" id="adminEmailField" style="display: none;">
-        <label for="InputAdminMail" class="form-label">Admin Email</label>
-        <input type="email" class="form-control" id="InputAdminMail" name="InputAdminMail" aria-describedby="AdminMail">
-        <div id="AdminMail" class="form-text">Manager's email is mandatory for company employees.</div>
-      </div>
+     
       
       <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>

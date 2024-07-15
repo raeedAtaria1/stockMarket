@@ -1,39 +1,57 @@
-  document.addEventListener('DOMContentLoaded', () => {
-    const workerCheckbox = document.getElementById('workerCheckbox');
-    const adminEmailField = document.getElementById('adminEmailField');
-
-    workerCheckbox.addEventListener('change', () => {
-      if (workerCheckbox.checked) {
-        adminEmailField.style.display = 'block'; // Show the admin email field
-        document.getElementById('InputAdminMail').setAttribute('required', ''); // Make it mandatory
-      } else {
-        document.getElementById('InputAdminMail').value = ''; // Clear the admin email field
-
-        adminEmailField.style.display = 'none'; // Hide the admin email field
-        document.getElementById('InputAdminMail').removeAttribute('required'); // Make it optional
-      }
-    });
-  });
-
 const form = document.getElementById('signupForm');
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const fullName = form.elements.fullName.value;
     const email = form.elements.email.value;
-    const password = form.elements.password.value;
-    let adminEmail = form.elements.InputAdminMail.value || 'noAdmin';
-    if( form.elements.InputAdminMail.value=="")
-           adminEmail='noAdmin';
-    const role="user";
-    console.log(adminEmail);
+    var password = form.elements.password.value;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errorMessage = document.getElementById("error-message");
+    if (!emailPattern.test(email)) {
+        errorMessage.textContent = 'Please enter a valid email address.';
+        errorMessage.classList.remove('d-none');
+        return;
+    }
+
+const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+if (!passwordPattern.test(password)) {
+        errorMessage.innerHTML = `
+            password must contain:<br>
+            Minimum 8 characters<br>
+            Must include an uppercase character<br>
+            Must include a lowercase character<br>
+            Must include a number<br>
+            Must include a special character (!, @, #, etc.).<br>
+            Supported special characters are: ! @ # $ % ^ & * ( ) - _ = + \\ | [ ] { } ; : / ? . > <
+        `;
+        errorMessage.classList.remove('d-none');
+        return;
+    }
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return hex(hash);
+    }
+  
+    function hex(buffer) {
+      const byteArray = new Uint8Array(buffer);
+      const hexCodes = [...byteArray].map(byte => {
+        const hexCode = byte.toString(16);
+        return hexCode.padStart(2, '0');
+      });
+      return hexCodes.join('');
+    }
+  
+    password = await hashPassword(password);
+   
     try {
     const response = await fetch('/signup', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ fullName, email, password,role,adminEmail})
+        body: JSON.stringify({ fullName, email, password})
     });
     if (response.ok) {
         localStorage.setItem('email', email);

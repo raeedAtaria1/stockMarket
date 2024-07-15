@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Us</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+        h1 {
+            color: aquamarine;
+        }
+        .form-container {
+            background-color: rgb(163, 163, 163);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .support-container{
+            background-color: rgb(76, 73, 73);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .contact-information {
+            background-color: lightgray;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        input, select, textarea {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+
+        }
+        .submitButton {
+            background-color: orange;
+            padding: 8px;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .submitButton:hover {
+            background-color: darkorange;
+        }
+        .icon {
+            width: 50px;
+            height: 50px;
+            fill: currentColor;
+        }
+        .contact-info-item {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Us</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-container">
+                    <form id="contactForm" action="/send-email" method="post">
+                        <input type="text" id="name" placeholder="Name*" required><br>
+                        <input type="email" id="email" placeholder="Email*" required><br>
+                        <div class="dropdown mb-3">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select an option
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#" data-value="Action">Action</a>
+                                <a class="dropdown-item" href="#" data-value="Another action">Another action</a>
+                                <a class="dropdown-item" href="#" data-value="Something else here">Something else here</a>
+                            </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label"></label>
+                            <textarea class="form-control" id="subject" rows="3" placeholder="subject"></textarea>
+                        </div>     
+                        <p style="margin-bottom: 20px;"></p>
+                        <p style="margin-bottom: 89px;"></p>
+                   
+                        <button type="submit" class="submitButton">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="support-container">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="photos/support_icon.png" class="icon mr-3">
+                        <div>
+                            <strong style="color: white;">NEED 24/7 SUPPORT</strong>
+                            <br>
+                            <button class="submitButton mt-2">Contact support</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-information">
+                    <div class="contact-info-item d-flex align-items-center">
+                        <img src="photos/phone_icon.png" class="icon mr-3">
+                        <div>
+                            <strong>CALL SALES NOW</strong>
+                            <br>
+                            <span style="font-size: small;">+972-053-2243187</span>
+                        </div>
+                    </div>
+                    <div class="contact-info-item d-flex align-items-center">
+                        <img src="photos/clock_icon.png" alt="Clock icon" class="icon mr-3">
+                        <div>
+                            <strong>Sales hours</strong>
+                            <br>
+                            <span style="font-size: small;">7am - 7pm CST</span>
+                        </div>
+                    </div>
+                    <div class="contact-info-item d-flex align-items-center">
+                        <img src="photos/email_icon.png" alt="Email icon" class="icon mr-3">
+                        <div>
+                            <strong>Mailing Address</strong>
+                            <br>
+                            <span style="font-size: small;">Raeed Solutions<br>Shafram-Krom<br>2020000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script>
+   document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var formData = new FormData(this);
+
+    fetch('/send-email', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert('Email sent successfully!');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error sending email.');
+    });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                var selectedText = this.textContent;
+                document.getElementById('dropdownMenuButton').textContent = selectedText;
+            });
+        });
+    });
+    </script>
+</body>
+</html>
