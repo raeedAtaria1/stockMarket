@@ -10,30 +10,49 @@
 
 </head>
 <body>
-  <div class="container form-container">
+  <div class="container form-container" style="max-width:500px ;">
     <h1 class="text-center">Sign Up</h1>
     <form id="signupForm">
       <div class="alert alert-danger d-none" id="error-message"></div>
 
-      <div class="mb-3">
-        <label for="fullName" class="form-label">Full Name</label>
-        <input type="text" class="form-control" id="fullName" name="fullName" required>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+          </svg>
+        </span>
+        <input type="text" class="form-control" id="fullName" name="fullName" placeholder="full name" required>
       </div>
-      <div class="mb-3">
-        <label for="InputEmail" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required>
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"></path>
+            </svg>
+        </span>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required placeholder="email">
       </div>
-      <div class="mb-3">
-        <label for="InputPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="InputPassword" name="password" required>
+
+  
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                <path d="M8 1a4 4 0 0 0-4 4v3H3a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-1V5a4 4 0 0 0-4-4zM4.5 5a3.5 3.5 0 1 1 7 0v3h-7V5zM4 9v4h8V9H4z"></path>
+            </svg>
+        </span>
+        <input type="password" class="form-control" id="InputPassword" name="password" placeholder="password" required>
       </div>
-      
      
       
-      <button type="submit" class="btn btn-primary">Sign Up</button>
-    </form>
-
+     <br>
+      
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </div>
+        </form>
+<br>
     <p class="text-center">Already have an account? <a href="/">Login</a></p>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
