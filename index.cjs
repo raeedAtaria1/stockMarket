@@ -4,6 +4,7 @@ const path = require('path');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const cors = require('cors');
+const { initializeApp } = require('firebase/app');
 
 const app = express();
 const port = process.env.PORT || 3000; // Use environment variable or default to 3000
@@ -12,11 +13,27 @@ app.listen(port, () => {
 });
 app.use(cors());
 // Initialize Firebase Admin SDK
+// Initialize Firebase Admin SDK
 const serviceAccount = require('./webapp-44c6b-firebase-adminsdk-8yipf-f80df382a8.json'); // Path to your service account key JSON file
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://webapp-44c6b-default-rtdb.europe-west1.firebasedatabase.app/' // Replace with your Firebase project's URL
 });
+
+// Initialize Firebase Client SDK
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAdnE-sgeMK2yLhcmj3EX6MKQfNgzSKdpk",
+  authDomain: "stock-market-de6a6.firebaseapp.com",
+  projectId: "stock-market-de6a6",
+  storageBucket: "stock-market-de6a6.appspot.com",
+  messagingSenderId: "626925898881",
+  appId: "1:626925898881:web:992726e6fc77a19c6ed180",
+  measurementId: "G-KWS9NJ4NLL"
+};
+const firebaseApp = initializeApp(firebaseConfig);
 
 // Route to serve the TaskManagement component
 // Middleware
