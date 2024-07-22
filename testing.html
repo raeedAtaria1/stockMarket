@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Data</title>
+</head>
+<body>
+    <h1>Stock Market Data</h1>
+    <pre id="output"></pre>
+
+    <script type="module">
+        'use strict';
+
+        // replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
+        var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=6R6A7R5G5HN31KZG';
+
+        fetch(url, {
+            headers: {'User-Agent': 'request'}
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('output').textContent = 'Error: ' + error;
+        });
+    </script>
+</body>
+</html>

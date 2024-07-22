@@ -62,7 +62,7 @@ form.addEventListener('submit', async (event) => {
 
     if (response.ok) {
       localStorage.setItem('email', email);
-      window.location.href = '/userHomePage.html';
+      window.location.href = '/marketData.html';
     } else {
       const errorText = await response.text();
       errorMessage.textContent = errorText;

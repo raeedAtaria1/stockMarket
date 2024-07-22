@@ -102,7 +102,7 @@ app.post('/login', async (req, res) => {
     }
 
     // Send the user role and the adminEmail to the client
-    return res.redirect('/userHomePage.html'); // Redirect to userhomepage.html
+    return res.redirect('/marketData.html'); // Redirect to userhomepage.html
   } catch (err) {
     console.error(err);
     return res.status(500).send('Internal Server Error');
