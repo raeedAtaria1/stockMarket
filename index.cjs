@@ -39,6 +39,16 @@ const firebaseApp = initializeApp(firebaseConfig);
 // Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'frontEnd')));
+app.get('/sign-in', (req, res) => {
+  res.sendFile(path.join(__dirname, "frontEnd", "logIN.html"));
+});
+app.get('/sign-up', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontEnd', 'sigh_up.html'));
+});
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontEnd', 'contactUS.html'));
+});
 //change
 app.get('/', (req, res) => {
   
@@ -141,15 +151,67 @@ app.post('/login', async (req, res) => {
   }
 });
 
-  // Create a transporter object using the default SMTP transport
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: 'stockmarketbraude@gmail.com',
-        pass: 'lwghgnpgpjuohdep',
-      },
-    });
-  
+app.post('/contact-us', async (req, res) => {
+  try {
+    const { name, email, selection, subject } = req.body;
+
+    // Send email to yourself
+    const adminRequest = mailjet
+      .post('send', { version: 'v3.1' })
+      .request({
+        Messages: [
+          {
+            From: {
+              Email: "stockmarketbraude@gmail.com",
+              Name: "stock market",
+            },
+            To: [
+              {
+                Email: "stockmarketbraude@gmail.com",
+                Name: "stock market",
+              },
+            ],
+            Subject: "New Contact Us Submission",
+            TextPart: `You have a new contact form submission from ${name}. Email: ${email}, Selection: ${selection}, Subject: ${subject}`,
+            HTMLPart: `<h3>New Contact Us Submission</h3><p>Name: ${name}</p><p>Email: ${email}</p><p>Selection: ${selection}</p><p>Subject: ${subject}</p>`,
+          },
+        ],
+      });
+
+    const adminResponse = await adminRequest;
+    console.log("Admin email sent successfully!");
+    console.log("Response:", JSON.stringify(adminResponse.body, null, 2));
+
+    // Send confirmation email to the client
+    const clientRequest = mailjet
+      .post('send', { version: 'v3.1' })
+      .request({
+        Messages: [
+          {
+            From: {
+              Email: "stockmarketbraude@gmail.com",
+              Name: "stock market",
+            },
+            To: [
+              {
+                Email: email,
+                Name: name,
+              },
+            ],
+            Subject: "We received your message",
+            TextPart: `Hello ${name}, we have received your message. We will get back to you shortly.`,
+            HTMLPart: `<h3>Thank you for contacting us, ${name}!</h3><p>We have received your message: ${subject}</p><p>We will get back to you shortly.</p>`,
+          },
+        ],
+      });
+
+    const clientResponse = await clientRequest;
+    console.log("Client email sent successfully!");
+    console.log("Response:", JSON.stringify(clientResponse.body, null, 2));
+
+    res.status(200).send('Message received, confirmation email sent');
+  } catch (error) {
+    console.error('Error sending emails:', error);
+    res.status(500).send('Internal server error');
+  }
+});

@@ -12,45 +12,56 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 30px;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         h1 {
-            color: aquamarine;
+            color: #17a2b8;
+            text-align: center;
+        }
+        .form-container, .support-container, .contact-information {
+            background-color: #343a40;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            color: white;
         }
         .form-container {
-            background-color: rgb(163, 163, 163);
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .support-container{
-            background-color: rgb(76, 73, 73);
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            background-color: #6c757d;
         }
         .contact-information {
-            background-color: lightgray;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            background-color: #adb5bd;
+            color: black;
         }
         input, select, textarea {
             margin-bottom: 10px;
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             box-sizing: border-box;
-
         }
         .submitButton {
-            background-color: orange;
-            padding: 8px;
+            background-color: #17a2b8;
+            padding: 10px;
             border: none;
             color: white;
             cursor: pointer;
+            width: 100%;
         }
         .submitButton:hover {
-            background-color: darkorange;
+            background-color: #138496;
         }
         .icon {
             width: 50px;
@@ -60,71 +71,69 @@
         .contact-info-item {
             margin-bottom: 15px;
         }
+        .dropdown-toggle::after {
+            margin-left: 0.5rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Contact Us</h1>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-container">
+        <div class="row w-100 h-100">
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <div class="form-container w-100">
+                    <h1>Contact Us</h1>
                     <form id="contactForm" action="/send-email" method="post">
-                        <input type="text" id="name" placeholder="Name*" required><br>
-                        <input type="email" id="email" placeholder="Email*" required><br>
+                        <input type="text" id="name" name="name" placeholder="Name*" required><br>
+                        <input type="email" id="email" name="email" placeholder="Email*" required><br>
                         <div class="dropdown mb-3">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Select an option
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#" data-value="Action">Action</a>
-                                <a class="dropdown-item" href="#" data-value="Another action">Another action</a>
-                                <a class="dropdown-item" href="#" data-value="Something else here">Something else here</a>
+                            <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#" data-value="Investment Inquiries">Investment Inquiries</a>
+                                <a class="dropdown-item" href="#" data-value="Technical Support">Technical Support</a>
+                                <a class="dropdown-item" href="#" data-value="General Information">General Information</a>
                             </div>
-                        <div class="mb-3">
-                            <label for="subject" class="form-label"></label>
-                            <textarea class="form-control" id="subject" rows="3" placeholder="subject"></textarea>
-                        </div>     
-                        <p style="margin-bottom: 20px;"></p>
-                        <p style="margin-bottom: 89px;"></p>
-                   
+                        </div>
+                        <textarea class="form-control" id="subject" name="subject" rows="3" placeholder="Subject"></textarea><br>
                         <button type="submit" class="submitButton">Submit</button>
                     </form>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="support-container">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="photos/support_icon.png" class="icon mr-3">
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <div class="support-container mb-3 w-100">
+                    <div class="d-flex align-items-center">
+                        <img src="photos/support_icon.png" class="icon mr-3" alt="Support Icon">
                         <div>
-                            <strong style="color: white;">NEED 24/7 SUPPORT</strong>
+                            <strong>NEED 24/7 SUPPORT</strong>
                             <br>
                             <button class="submitButton mt-2">Contact support</button>
                         </div>
                     </div>
                 </div>
-                <div class="contact-information">
+                <div class="contact-information w-100">
                     <div class="contact-info-item d-flex align-items-center">
-                        <img src="photos/phone_icon.png" class="icon mr-3">
+                        <img src="photos/phone_icon.png" class="icon mr-3" alt="Phone Icon">
                         <div>
                             <strong>CALL SALES NOW</strong>
                             <br>
-                            <span style="font-size: small;">+972-053-2243187</span>
+                            <span>+972-053-2243187</span>
                         </div>
                     </div>
                     <div class="contact-info-item d-flex align-items-center">
-                        <img src="photos/clock_icon.png" alt="Clock icon" class="icon mr-3">
+                        <img src="photos/clock_icon.png" class="icon mr-3" alt="Clock Icon">
                         <div>
                             <strong>Sales hours</strong>
                             <br>
-                            <span style="font-size: small;">7am - 7pm CST</span>
+                            <span>7am - 7pm CST</span>
                         </div>
                     </div>
                     <div class="contact-info-item d-flex align-items-center">
-                        <img src="photos/email_icon.png" alt="Email icon" class="icon mr-3">
+                        <img src="photos/email_icon.png" class="icon mr-3" alt="Email Icon">
                         <div>
                             <strong>Mailing Address</strong>
                             <br>
-                            <span style="font-size: small;">Raeed Solutions<br>Shafram-Krom<br>2020000</span>
+                            <span>Raeed Solutions<br>Shafram-Krom<br>2020000</span>
                         </div>
                     </div>
                 </div>
@@ -141,29 +150,47 @@
    document.getElementById('contactForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    var formData = new FormData(this);
+    // Get values from the form fields
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var selectedOption = document.getElementById('dropdownMenuButton').textContent;
+    var subject = document.getElementById('subject').value;
 
-    fetch('/send-email', {
+    // Create a JSON object with the form data
+    var data = {
+        name: name,
+        email: email,
+        selection: selectedOption,
+        subject: subject
+    };
+
+    // Send the form data using fetch
+    fetch('/contact-us', {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
     })
     .then(response => response.text())
     .then(data => {
-        alert('Email sent successfully!');
+        alert('We got your message');
     })
     .catch(error => {
         console.error('Error:', error);
         alert('Error sending email.');
     });
 });
+
 document.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', function() {
-                var selectedText = this.textContent;
-                document.getElementById('dropdownMenuButton').textContent = selectedText;
-            });
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function() {
+            var selectedText = this.textContent;
+            document.getElementById('dropdownMenuButton').textContent = selectedText;
         });
     });
+});
+
     </script>
 </body>
 </html>
