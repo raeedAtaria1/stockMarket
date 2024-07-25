@@ -55,7 +55,7 @@ if (!passwordPattern.test(password)) {
     });
     if (response.ok) {
         localStorage.setItem('email', email);
-        window.location.href = '/userHomePage.html';
+        window.location.href = '/marketData.html';
     } else {
         const errorMessage = await response.text();
         alert(errorMessage);

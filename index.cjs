@@ -1,10 +1,10 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const path = require('path');
-const React = require('react');
-const ReactDOM = require('react-dom');
 const cors = require('cors');
 const { initializeApp } = require('firebase/app');
+const nodemailer = require('nodemailer');
+const mailjet = require('node-mailjet').apiConnect('b38cc840683e7de80ea48ecfe450958a', '3d99747beb2a062ab7bb7964ad94b44c');
 
 const app = express();
 const port = process.env.PORT || 3000; // Use environment variable or default to 3000
@@ -47,10 +47,10 @@ app.get('/', (req, res) => {
 
 });
 
-
-//the sigh-up function 
+// Signup route
 app.post('/signup', async (req, res) => {
-  const { email, fullName, password} = req.body;
+  const { email, fullName, password } = req.body;
+  
   try {
     // Check if the user already exists
     const usersRef = admin.firestore().collection('users');
@@ -60,7 +60,6 @@ app.post('/signup', async (req, res) => {
       res.status(400).send('User already exists');
       return;
     }
-   
 
     // Create a new user document in Firestore
     const newUser = {
@@ -68,18 +67,51 @@ app.post('/signup', async (req, res) => {
       fullName,
       password,
     };
-    const newUserRef = await usersRef.add(newUser);
+    await usersRef.add(newUser);
 
-    // Redirect to userhomepage.html or any other page you want
-    // res.sendFile(path.join(__dirname, '../frontEnd/userhomepage.html'));
-    res.redirect('/userHomePage.html');
+    // Send a welcome email to the new user
+    const request = mailjet
+      .post('send', { version: 'v3.1' })
+      .request({
+        Messages: [
+          {
+            From: {
+              Email: "stockmarketbraude@gmail.com",
+              Name: "stock market",
+            },
+            To: [
+              {
+                Email: email,
+                Name: fullName,
+              },
+            ],
+            Subject: "Welcome to Stock Market",
+            TextPart: "Hello, welcome to Stock Market! We are excited to have you.",
+            HTMLPart: "<h3>Welcome to Stock Market!</h3><p>We are excited to have you on board. Explore our platform and start your journey with us.</p>",
+          },
+        ],
+      });
 
+    request
+      .then((result) => {
+        console.log("Email sent successfully!");
+        console.log("Response:", JSON.stringify(result.body, null, 2));
+      })
+      .catch((err) => {
+        console.error("Failed to send email:");
+        console.error("Status code:", err.statusCode);
+        console.error("Error message:", err.message);
+        if (err.response && err.response.res && err.response.res.text) {
+          console.error("Detailed error message:", err.response.res.text);
+        }
+      });
+
+    res.status(201).send('Signup successful');
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+    console.error('Error during signup:', error);
+    res.status(500).send('Internal server error');
   }
 });
-
 
 
 //the login function 
@@ -108,3 +140,16 @@ app.post('/login', async (req, res) => {
     return res.status(500).send('Internal Server Error');
   }
 });
+
+  // Create a transporter object using the default SMTP transport
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'stockmarketbraude@gmail.com',
+        pass: 'lwghgnpgpjuohdep',
+      },
+    });
+  
