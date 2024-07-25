@@ -40,14 +40,14 @@ const firebaseApp = initializeApp(firebaseConfig);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'frontEnd')));
 app.get('/sign-in', (req, res) => {
-  res.sendFile(path.join(__dirname, "frontEnd", "logIN.html"));
+  res.sendFile(path.join(__dirname, "frontEnd/logIN.html"));
 });
 app.get('/sign-up', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontEnd', 'sigh_up.html'));
+  res.sendFile(path.join(__dirname, 'frontEnd/sigh_up.html'));
 });
 
 app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontEnd', 'contactUS.html'));
+  res.sendFile(path.join(__dirname, 'frontEnd/contactUS.html'));
 });
 //change
 app.get('/', (req, res) => {
