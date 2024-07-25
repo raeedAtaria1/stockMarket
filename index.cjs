@@ -167,7 +167,7 @@ app.post('/contact-us', async (req, res) => {
             },
             To: [
               {
-                Email: "stockmarketbraude@gmail.com",
+                Email: "raeed.ataria@e.braude.ac.il",
                 Name: "stock market",
               },
             ],
