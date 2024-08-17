@@ -2,8 +2,6 @@ const express = require('express');
 const admin = require('firebase-admin');
 const path = require('path');
 const cors = require('cors');
-const axios = require('axios');
-
 const { initializeApp } = require('firebase/app');
 const nodemailer = require('nodemailer');
 const mailjet = require('node-mailjet').apiConnect('b38cc840683e7de80ea48ecfe450958a', '3d99747beb2a062ab7bb7964ad94b44c');
@@ -58,22 +56,7 @@ app.get('/', (req, res) => {
   // res.setHeader("Access-Control-Allow-Credentials", "true");
 
 });
-app.get('/crypto-data', async (req, res) => {
-  try {
-    // Request data from the CoinMarketCap API
-    const response = await axios.get('https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
-      headers: {
-        'X-CMC_PRO_API_KEY': '890e2753-540b-4ec0-8926-bea1ba662d10', // Replace with your API key
-      },
-    });
-    
-    // Send the API data back to the front-end
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error fetching cryptocurrency data:', error.message);
-    res.status(500).json({ error: 'Failed to fetch data from CoinMarketCap' });
-  }
-});
+
 // Signup route
 app.post('/signup', async (req, res) => {
   const { email, fullName, password } = req.body;
