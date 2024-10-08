@@ -197,53 +197,58 @@
         };
 
         const generateHTMLTable = (stockData) => {
-            let totalMarketCap = 0;
-            let html = '';
+    let totalMarketCap = 0;
+    let html = '';
 
-            companies.forEach((company, index) => {
-                const intradayData = stockData[company.symbol]?.intraday;
-                const overviewData = stockData[company.symbol]?.overview;
+    companies.forEach((company, index) => {
+        const intradayData = stockData[company.symbol]?.intraday;
+        const overviewData = stockData[company.symbol]?.overview;
 
-                let latestPrice = 'N/A';
-                let marketCap = 'N/A';
-                let priceChange = 'N/A';
-                let priceChangeClass = '';
+        let latestPrice = 'N/A';
+        let marketCap = 'N/A';
+        let priceChange = 'N/A';
+        let priceChangeClass = '';
 
-                if (intradayData && intradayData['Time Series (5min)']) {
-                    const latestTime = Object.keys(intradayData['Time Series (5min)'])[0];
-                    latestPrice = parseFloat(intradayData['Time Series (5min)'][latestTime]['1. open']).toFixed(2);
-                    const previousTime = Object.keys(intradayData['Time Series (5min)'])[1];
-                    const previousPrice = parseFloat(intradayData['Time Series (5min)'])[previousTime]['1. open'];
-                    const change = latestPrice - previousPrice;
-                    const percentageChange = ((change / previousPrice) * 100).toFixed(2);
-                    priceChange = `${percentageChange}%`;
-                    priceChangeClass = change >= 0 ? 'up' : 'down';
-                    latestPrice = `$${latestPrice}`;
-                }
+        if (intradayData && intradayData['Time Series (5min)']) {
+            const timeSeries = intradayData['Time Series (5min)'];
+            const times = Object.keys(timeSeries);
+            if (times.length > 1) {
+                const latestTime = times[0];
+                latestPrice = parseFloat(timeSeries[latestTime]['1. open']).toFixed(2);
+                const previousTime = times[1];
+                const previousPrice = parseFloat(timeSeries[previousTime]['1. open']);
+                const change = latestPrice - previousPrice;
+                const percentageChange = ((change / previousPrice) * 100).toFixed(2);
+                priceChange = `${percentageChange}%`;
+                priceChangeClass = change >= 0 ? 'up' : 'down';
+                latestPrice = `$${latestPrice}`;
+            }
+        }
 
-                if (overviewData && overviewData.MarketCapitalization) {
-                    const marketCapValue = parseFloat(overviewData.MarketCapitalization) / 1e12;
-                    marketCap = marketCapValue.toFixed(2) + ' trillion $';
-                    totalMarketCap += marketCapValue;
-                }
+        if (overviewData && overviewData.MarketCapitalization) {
+            const marketCapValue = parseFloat(overviewData.MarketCapitalization) / 1e12;
+            marketCap = marketCapValue.toFixed(2) + ' trillion $';
+            totalMarketCap += marketCapValue;
+        }
 
-                const stockChartUrl = `https://finance.yahoo.com/quote/${company.symbol}/chart`;
+        const stockChartUrl = `https://finance.yahoo.com/quote/${company.symbol}/chart`;
 
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td class="company"><img src="${company.logo}" alt="${company.name} logo">${company.name}</td>
-                        <td>${marketCap}</td>
-                        <td>${latestPrice}</td>
-                        <td class="${priceChangeClass}">${priceChange}</td>
-                        <td><a href="${stockChartUrl}" target="_blank">View Chart</a></td>
-                        <td><img src="${company.flag}" alt="${company.country} flag" class="flag"> ${company.country}</td>
-                    </tr>`;
-            });
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td class="company"><img src="${company.logo}" alt="${company.name} logo">${company.name}</td>
+                <td>${marketCap}</td>
+                <td>${latestPrice}</td>
+                <td class="${priceChangeClass}">${priceChange}</td>
+                <td><a href="${stockChartUrl}" target="_blank">View Chart</a></td>
+                <td><img src="${company.flag}" alt="${company.country} flag" class="flag"> ${company.country}</td>
+            </tr>`;
+    });
 
-            document.querySelector('#companiesTable tbody').innerHTML = html;
-            document.getElementById('total-market-cap').textContent = 'Total Market Cap: ' + totalMarketCap.toFixed(2) + ' trillion $';
-        };
+    document.querySelector('#companiesTable tbody').innerHTML = html;
+    document.getElementById('total-market-cap').textContent = 'Total Market Cap: ' + totalMarketCap.toFixed(2) + ' trillion $';
+};
+
 
         const main = async () => {
             let stockData = {};
