@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Largest Companies by Market Cap</title>
+    <title>Companies by Market Cap</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -86,6 +86,16 @@
             vertical-align: middle;
         }
 
+        .sort-icon {
+            cursor: pointer;
+            display: inline-block;
+            margin-left: 8px;
+            width: 16px;
+            height: 16px;
+            background: url('/mnt/data/Screenshot 2024-10-08 at 15.19.05.png') no-repeat;
+            background-size: contain;
+        }
+
         .company img {
             width: 40px;
             height: 40px;
@@ -96,14 +106,6 @@
             width: 30px;
             height: 20px;
             margin-right: 5px;
-        }
-
-        .up {
-            color: green;
-        }
-
-        .down {
-            color: red;
         }
 
         @media (max-width: 768px) {
@@ -130,9 +132,9 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 class="display-4">Largest Companies by Market Cap</h1>
+            <h1 class="display-4">Companies by Market Cap</h1>
             <div class="header-info">
-                <p>Number of companies: 10</p>
+                <p id="total-companies">Number of companies: 10</p>
                 <p id="total-market-cap">Total Market Cap: </p>
             </div>
         </div>
@@ -142,12 +144,12 @@
                     <thead>
                         <tr>
                             <th scope="col" onclick="sortTable(0)">Rank <i class="fas fa-sort"></i></th>
-                            <th scope="col" onclick="sortTable(1)">Name <i class="fas fa-sort"></i></th>
-                            <th scope="col" onclick="sortTable(2)">Market Cap <i class="fas fa-sort"></i></th>
-                            <th scope="col" onclick="sortTable(3)">Price <i class="fas fa-sort"></i></th>
-                            <th scope="col" onclick="sortTable(4)">Today <i class="fas fa-sort"></i></th>
-                            <th scope="col">Price (30 days)</th>
-                            <th scope="col" onclick="sortTable(6)">Country <i class="fas fa-sort"></i></th>
+                            <th scope="col">Logo</th>
+                            <th scope="col" onclick="sortTable(2)">Name <i class="fas fa-sort"></i></th>
+                            <th scope="col" onclick="sortTable(3)">Market Cap <i class="fas fa-sort"></i></th>
+                            <th scope="col" onclick="sortTable(4)">Country <i class="fas fa-sort"></i></th>
+                            <th scope="col" onclick="sortTable(5)">Price <i class="fas fa-sort"></i></th>
+                            <th scope="col">Stock Chart</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -159,166 +161,133 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script>
+        const apiKey = '0u349TE5Nk1SqFvlKPdIjb0P9ZhLJRTM'; // Replace with your actual API key
+
         const companies = [
-            { name: 'Microsoft', symbol: 'MSFT', logo: 'https://logo.clearbit.com/microsoft.com', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
-            { name: 'Apple', symbol: 'AAPL', logo: 'https://logo.clearbit.com/apple.com', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
-            { name: 'NVIDIA', symbol: 'NVDA', logo: 'https://logo.clearbit.com/nvidia.com', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
-            { name: 'Alphabet (Google)', symbol: 'GOOG', logo: 'https://logo.clearbit.com/abc.xyz', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
-            { name: 'Amazon', symbol: 'AMZN', logo: 'https://logo.clearbit.com/amazon.com', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
-            { name: 'Meta Platforms (Facebook)', symbol: 'META', logo: 'https://logo.clearbit.com/meta.com', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
-            { name: 'TSMC', symbol: 'TSM', logo: 'https://logo.clearbit.com/tsmc.com', country: 'Taiwan', flag: 'https://flagcdn.com/tw.svg' },
-            { name: 'Visa', symbol: 'V', logo: 'https://logo.clearbit.com/visa.com', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
-            { name: 'Johnson & Johnson', symbol: 'JNJ', logo: 'https://logo.clearbit.com/jnj.com', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
-            { name: 'Walmart', symbol: 'WMT', logo: 'https://logo.clearbit.com/walmart.com', country: 'USA', flag: 'https://flagcdn.com/us.svg' },
+            { name: 'Microsoft', symbol: 'MSFT', logo: 'https://logo.clearbit.com/microsoft.com', country: 'USA' },
+            { name: 'Apple', symbol: 'AAPL', logo: 'https://logo.clearbit.com/apple.com', country: 'USA' },
+            { name: 'NVIDIA', symbol: 'NVDA', logo: 'https://logo.clearbit.com/nvidia.com', country: 'USA' },
+            { name: 'Alphabet (Google)', symbol: 'GOOG', logo: 'https://logo.clearbit.com/abc.xyz', country: 'USA' },
+            { name: 'Amazon', symbol: 'AMZN', logo: 'https://logo.clearbit.com/amazon.com', country: 'USA' },
+            { name: 'Meta Platforms (Facebook)', symbol: 'META', logo: 'https://logo.clearbit.com/meta.com', country: 'USA' },
+            { name: 'TSMC', symbol: 'TSM', logo: 'https://logo.clearbit.com/tsmc.com', country: 'Taiwan' },
+            { name: 'Visa', symbol: 'V', logo: 'https://logo.clearbit.com/visa.com', country: 'USA' },
+            { name: 'Johnson & Johnson', symbol: 'JNJ', logo: 'https://logo.clearbit.com/jnj.com', country: 'USA' },
+            { name: 'Walmart', symbol: 'WMT', logo: 'https://logo.clearbit.com/walmart.com', country: 'USA' },
+
         ];
 
-        const fetchIntradayData = async (symbol) => {
+        const fetchCompanyData = async () => {
+            const companyDataPromises = companies.map(company => 
+                axios.get(`https://financialmodelingprep.com/api/v3/quote/${company.symbol}?apikey=${apiKey}`)
+            );
+
             try {
-                const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=5min&apikey=6R6A7R5G5HN31KZG`);
-                const data = await response.json();
-                return data;
+                const responses = await Promise.all(companyDataPromises);
+                return responses.map((response, index) => ({
+                    ...companies[index],
+                    marketCap: response.data[0].marketCap || 'N/A',
+                    price: response.data[0].price || 'N/A' // Fetch the stock price
+                }));
             } catch (error) {
-                console.error(`Error fetching intraday data for ${symbol}:`, error.message);
-                return null;
+                console.error('Error fetching company data:', error);
+                return companies.map(company => ({
+                    ...company,
+                    marketCap: 'N/A',
+                    price: 'N/A' // Handle missing price data
+                }));
             }
         };
 
-        const fetchOverviewData = async (symbol) => {
-            try {
-                const response = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=6R6A7R5G5HN31KZG`);
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error(`Error fetching overview data for ${symbol}:`, error.message);
-                return null;
-            }
+        const generateHTMLTable = async () => {
+            const companyData = await fetchCompanyData();
+            let totalMarketCap = 0;
+            let html = '';
+
+            companyData.forEach((data, index) => {
+                const marketCap = data.marketCap ? (data.marketCap / 1e9).toFixed(2) + 'B' : 'N/A'; // Convert to billions
+                const price = data.price !== 'N/A' ? `$${data.price.toFixed(2)}` : 'N/A'; // Format price to 2 decimal places
+
+                const stockChartUrl = `https://finance.yahoo.com/quote/${data.symbol}/chart`;
+
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><img src="${data.logo}" alt="${data.name} Logo" width="40"></td>
+                        <td>${data.name}</td>
+                        <td>${marketCap}</td>
+                        <td>${data.country}</td>
+                        <td>${price}</td> <!-- Price column -->
+                        <td><a href="${stockChartUrl}" target="_blank">View Chart</a></td> <!-- Chart link -->
+                    </tr>`;
+                
+                totalMarketCap += data.marketCap ? data.marketCap : 0;
+            });
+
+            document.querySelector('#companiesTable tbody').innerHTML = html;
+            document.getElementById('total-market-cap').textContent = 'Total Market Cap: ' + (totalMarketCap / 1e9).toFixed(2) + 'B'; // Convert to billions
         };
 
-        const generateHTMLTable = (stockData) => {
-    let totalMarketCap = 0;
-    let html = '';
+        const sortTable = (columnIndex) => {
+    const table = document.getElementById('companiesTable').getElementsByTagName('tbody')[0];
+    const rows = Array.from(table.getElementsByTagName('tr'));
 
-    companies.forEach((company, index) => {
-        const intradayData = stockData[company.symbol]?.intraday;
-        const overviewData = stockData[company.symbol]?.overview;
+    // Determine if the current column is sorted in ascending or descending order
+    let isAscending = table.getAttribute('data-sort-order') === 'asc';
+    table.setAttribute('data-sort-order', isAscending ? 'desc' : 'asc');
 
-        let latestPrice = 'N/A';
-        let marketCap = 'N/A';
-        let priceChange = 'N/A';
-        let priceChangeClass = '';
-
-        if (intradayData && intradayData['Time Series (5min)']) {
-            const timeSeries = intradayData['Time Series (5min)'];
-            const times = Object.keys(timeSeries);
-            if (times.length > 1) {
-                const latestTime = times[0];
-                latestPrice = parseFloat(timeSeries[latestTime]['1. open']).toFixed(2);
-                const previousTime = times[1];
-                const previousPrice = parseFloat(timeSeries[previousTime]['1. open']);
-                const change = latestPrice - previousPrice;
-                const percentageChange = ((change / previousPrice) * 100).toFixed(2);
-                priceChange = `${percentageChange}%`;
-                priceChangeClass = change >= 0 ? 'up' : 'down';
-                latestPrice = `$${latestPrice}`;
-            }
+    // Function to parse Market Cap and Price values
+    const parseValue = (value) => {
+        // Check if the value contains a "B" for billions and convert to a number
+        if (value.includes('B')) {
+            return parseFloat(value.replace('B', '')) * 1e9; // Convert billions to number
         }
-
-        if (overviewData && overviewData.MarketCapitalization) {
-            const marketCapValue = parseFloat(overviewData.MarketCapitalization) / 1e12;
-            marketCap = marketCapValue.toFixed(2) + ' trillion $';
-            totalMarketCap += marketCapValue;
+        // Check if the value contains a "$" sign and parse the price value
+        if (value.includes('$')) {
+            return parseFloat(value.replace(/[^\d.-]/g, '')); // Remove $ and other non-numeric characters
         }
+        // If it's a plain number (like Rank), just return it as a float
+        return parseFloat(value.replace(/[^\d.-]/g, '')) || value; // Fallback to string comparison
+    };
 
-        const stockChartUrl = `https://finance.yahoo.com/quote/${company.symbol}/chart`;
+    // Perform sorting
+    rows.sort((rowA, rowB) => {
+        let cellA = rowA.getElementsByTagName('td')[columnIndex].textContent.trim();
+        let cellB = rowB.getElementsByTagName('td')[columnIndex].textContent.trim();
 
-        html += `
-            <tr>
-                <td>${index + 1}</td>
-                <td class="company"><img src="${company.logo}" alt="${company.name} logo">${company.name}</td>
-                <td>${marketCap}</td>
-                <td>${latestPrice}</td>
-                <td class="${priceChangeClass}">${priceChange}</td>
-                <td><a href="${stockChartUrl}" target="_blank">View Chart</a></td>
-                <td><img src="${company.flag}" alt="${company.country} flag" class="flag"> ${company.country}</td>
-            </tr>`;
+        cellA = parseValue(cellA);
+        cellB = parseValue(cellB);
+
+        // Sort numbers properly
+        if (typeof cellA === 'number' && typeof cellB === 'number') {
+            return isAscending ? cellA - cellB : cellB - cellA; // Numeric sort
+        } else {
+            // Fallback to string comparison if not a number
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        }
     });
 
-    document.querySelector('#companiesTable tbody').innerHTML = html;
-    document.getElementById('total-market-cap').textContent = 'Total Market Cap: ' + totalMarketCap.toFixed(2) + ' trillion $';
+    // Rebuild the table with the sorted rows
+    rows.forEach(row => table.appendChild(row));
+
+    // Reset all sort icons
+    document.querySelectorAll('th i').forEach(icon => {
+        icon.classList.remove('fa-sort-up', 'fa-sort-down');
+        icon.classList.add('fa-sort');
+    });
+
+    // Set the appropriate sort icon for the current column
+    const sortIcon = document.querySelectorAll('th i')[columnIndex];
+    sortIcon.classList.remove('fa-sort');
+    sortIcon.classList.add(isAscending ? 'fa-sort-up' : 'fa-sort-down');
 };
 
 
-        const main = async () => {
-            let stockData = {};
-            for (let company of companies) {
-                const intradayData = await fetchIntradayData(company.symbol);
-                const overviewData = await fetchOverviewData(company.symbol);
-                stockData[company.symbol] = { intraday: intradayData, overview: overviewData };
-            }
-            generateHTMLTable(stockData);
-        };
 
-        let currentSortColumn = 0;
-        let currentSortDir = 'asc';
 
-        function sortTable(n) {
-            const table = document.getElementById('companiesTable');
-            const rows = Array.from(table.rows).slice(1);
-            const dataType = table.rows[1].cells[n].innerHTML.includes('$') || table.rows[1].cells[n].innerHTML.includes('%') ? 'number' : 'string';
-
-            rows.sort((rowA, rowB) => {
-                const cellA = rowA.cells[n].innerHTML;
-                const cellB = rowB.cells[n].innerHTML;
-                let a = cellA.replace(/[$,%]/g, '');
-                let b = cellB.replace(/[$,%]/g, '');
-
-                if (dataType === 'number') {
-                    a = parseFloat(a);
-                    b = parseFloat(b);
-                }
-
-                if (currentSortDir === 'asc') {
-                    return a > b ? 1 : -1;
-                } else {
-                    return a < b ? 1 : -1;
-                }
-            });
-
-            if (currentSortColumn === n) {
-                currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
-            } else {
-                currentSortDir = 'asc';
-            }
-            currentSortColumn = n;
-
-            const tbody = table.tBodies[0];
-            rows.forEach((row, index) => {
-                row.cells[0].innerText = index + 1; // Update rank
-                tbody.appendChild(row);
-            });
-
-            updateSortIndicators();
-        }
-
-        function updateSortIndicators() {
-            const indicators = document.querySelectorAll('th i');
-            indicators.forEach(indicator => {
-                indicator.className = 'fas fa-sort';
-            });
-            const indicator = indicators[currentSortColumn];
-            if (currentSortDir === 'asc') {
-                indicator.className = 'fas fa-sort-up';
-            } else {
-                indicator.className = 'fas fa-sort-down';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            updateSortIndicators();
-            main();
-        });
+        document.addEventListener('DOMContentLoaded', generateHTMLTable);
     </script>
 </body>
+
 </html>
